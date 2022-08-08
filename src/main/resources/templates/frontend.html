@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<!--- Header information about the page -->
+<body>
+	<div layout:fragment="content">
+		<script
+			src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
+		<script>
+			/* Without these comments, Thymeleaf will try to parse the Javascript as XML and break itself sometimes */
+			/*<![CDATA[*/
+			var app = angular.module('myApp', []);
+			app.controller('populateCtrl', function($scope, $http, $q) {
+
+				/* Logic that handles controlling your page goes here */
+
+				console.log($scope);
+
+				$scope.math = function(a, b) {
+					return (2 * b) + a;
+				}
+
+				$scope.myFunction = function() {
+					/* Creates a function inside of `$scope` called `onSubmit` that takes no parameters and 
+					maybe returns something (unlike in Java, function return types aren't declared -- the 
+					function can return whatever it wants, or nothing at all...) */
+
+					console.log("Howdy");
+					alert("Howdy! You have " + $scope.x + " cowboy hats!");
+				}
+
+				$scope.weekDays = [ {
+					value : 1,
+					display : 'Monday'
+				}, {
+					value : 2,
+					display : 'Tuesday'
+				}, {
+					value : 3,
+					display : 'Wednesday'
+				}, {
+					value : 4,
+					display : 'Thursday'
+				}, {
+					value : 5,
+					display : 'Friday'
+				}, {
+					value : 6,
+					display : 'Saturday'
+				}, {
+					value : 7,
+					display : 'Sunday'
+				} ];
+
+				$scope.events = [ "free", "party", "work", "study", "gym" ];
+
+				$scope.selectedEvents = [];
+
+				$scope.scheduleData = {
+					"Kai Presler-Marshall" : [ {
+						"class" : "csc326",
+						"time" : "3:00",
+						"id" : 1583038800000
+					}, {
+						"class" : "csc246",
+						"time" : "12:50",
+						"id" : 1583211600000
+					} ],
+					"Sara Ghodsi" : [ {
+						"class" : "csc116",
+						"time" : "12:50",
+						"id" : 1583211600000
+					}, {
+						"class" : "csc379",
+						"time" : "12:50",
+						"id" : 1583211600000
+					}, {
+						"class" : "csc316",
+						"time" : "12:50",
+						"id" : 1583211600000
+					} ]
+				};
+
+			});
+
+			/* Without these comments, Thymeleaf will try to parse the Javascript as XML and break itself sometimes */
+			/*]]>*/
+		</script>
+
+		<div ng-app="myApp" ng-controller="populateCtrl">
+
+			<!--- Various HTML elements, with extra tags telling Angular how to work with them, go here -->
+
+			<input type="text" ng-model="x" required="true" /> <input
+				type="text" ng-model="y" required="true" /> The result is {{
+			math(x, y) }}
+			<!-- the { and } are spread out here for display. In practice,
+                                 there are not spaces between the two { before and the two } after
+                                 the expression -->
+
+			<br />
+
+			<button ng-click="myFunction()" type="button">Click Me</button>
+
+<br />
+<br />
+			<div class="col-sm">
+				Select time interval: <br /> <select ng-model="interval"
+					ng-options="item as item.display for item in weekDays"
+					required="true">
+					<option value="">Select a day of the week:</option>
+				</select>
+			</div>
+
+			You selected {{ interval.display }}
+<br />
+<br />
+			<div class="col-sm">
+				(Optional) Select the event to add <br />
+				<div ng-repeat="event in events track by $index">
+					<input type="checkbox" ng-model="$parent.selectedEvents[event]">
+					<tt> {{event}}</tt>
+					</input>
+				</div>
+			</div>
+<br />
+<br />
+			<div ng-repeat="(user, schedules) in scheduleData track by $index">
+				Classes for {{user}}:<br />
+				<div id="{{user}}">
+					<li ng-repeat="schedule in schedules">{{schedule.class}}</li>
+				</div>
+			</div>
+
+		</div>
+
+
+	</div>
+
+</body>
+</html>

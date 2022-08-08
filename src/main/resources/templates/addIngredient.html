@@ -1,0 +1,304 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Inventory</title>
+<link rel="stylesheet" href="css/bootstrap.css" />
+<link rel="stylesheet" href="css/app.css" />
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
+</head>
+
+<body>
+
+
+	<script>
+		/*<![CDATA[*/
+		var app = angular.module('myApp', []);
+		app
+				.controller(
+						'inventoryCtrl',
+						function($scope, $http, $q) {
+							/* $scope.inventoryOriginal = {
+								coffee : '',
+								milk : '',
+								sugar : '',
+								chocolate : ''
+							}; */
+
+							/* List of inventory */
+
+							//Create inventory original object
+							$scope.inventoryOriginal = '';
+
+							//Create ingredient object
+							$scope.ingredient = {
+								id : '',
+								ingredient : '',
+								amount : ''
+							};
+
+							//Create ingredients list
+							$scope.ingredients = [];
+
+							//Create new inventory object 
+							/*$scope.inventory = {
+								id: '',
+								ingredients : $scope.ingredients
+							};*/
+							$scope.inventory = '';
+
+							//Get inventory from DB
+							$scope.getInventory = function() {
+								$http
+										.get("/api/v1/inventory")
+										.then(
+												function(response) {
+													//sets the inventoryOrignal object to what is returned from get call
+													$scope.inventoryOriginal = response.data;
+													//sets the ingredients list so ingredients can be added to it
+													$scope.ingredients = $scope.inventoryOriginal.ingredients;
+
+												},
+												function(rejection) {
+													console
+															.error("Error while getting Inventory");
+													//reset inventory object 
+													$scope.inventoryOriginal = {
+														id : '',
+														ingredients : $scope.ingredients
+													};
+												})
+							}
+
+							//Clear ingredient object before user adds another 
+							$scope.resetIngredientFields = function() {
+
+								//reset the temporary ingredient object
+								$scope.ingredient = {
+									id : '',
+									ingredient : '',
+									amount : ''
+								};
+								if (undefined != $scope.addIngredientForm) {
+									$scope.addIngredientForm.$setPristine(); // reset Form
+								}
+
+							}
+
+							
+							$scope.notInteger = false;
+							/* function for adding ingredients*/
+							$scope.addIngredient = function() {
+								
+								$scope.ingredient.amount = parseFloat($scope.ingredient.amount);
+								console.log($scope.ingredient.amount);
+							
+								if ( Number.isInteger($scope.ingredient.amount)) {
+									//converting to a integer
+									$scope.ingredient.amount = parseInt($scope.ingredient.amount);
+									//add current ingredient to list of ingredients
+									$scope.ingredients.push($scope.ingredient);
+									$scope.resetIngredientFields();
+									$scope.notInteger = false;
+								} else {
+									$scope.notInteger = true;
+									$scope.success = false;
+									
+								}
+								//console.log($scope.success);
+								
+								
+
+							}
+
+							//** Updating the inventory by calling the put API call */
+							$scope.updateInventory = function() {
+								$scope.success = false;
+								$scope.failure = false;
+								$scope.duplicate = false;
+								$scope.invalidAmt = false;
+								
+								//console.log($scope.duplicate);
+								console.log($scope.inventory);
+								console.log($scope.inventoryOriginal);
+
+								$http.put("/api/v1/inventory",
+												$scope.inventoryOriginal)
+										.then(
+												function(success) {
+													$scope.failure = false;
+													console.log("success putting inventory");
+													console.log(success);
+
+												},
+
+												function(rejection) {
+													$scope.failure = true;
+													console.error("Error while updating Inventory!");
+													
+													//invalid ingredient amount
+													if (rejection.status == 406) {
+														$scope.invalidAmt = true;
+														$scope.failure = true;
+														$scope.success = false;
+													}
+
+													//duplicate ingredient
+													if (rejection.status == 409) {
+														$scope.duplicate = true;
+														$scope.failure = true;
+														$scope.success = false;
+													} else {
+
+														$scope.failure = true;
+														$scope.success = false;
+														$scope.getInventory();
+
+														//console.log(rejection);
+														
+													}
+
+													//gets the new inventory based on whether anything was updated from the put call
+													$scope.getInventory();
+												});
+								
+								//make sure success and failure are opposites
+								$scope.success = !($scope.failure);
+
+							}
+
+							//Adds the ingredient and updatees the inventory
+							$scope.submit = function() {
+								$scope.addIngredient();
+								console.log($scope.inventory);
+								if ( !$scope.notInteger ) {
+									$scope.updateInventory();	
+								}
+								$scope.reset();
+							}
+
+							$scope.getInventory();
+
+							//Resets objects and fields to be blank
+							$scope.reset = function() {
+								$scope.inventory = {
+									id : '',
+									ingredients : $scope.ingredients
+
+								};
+								$scope.ingredient = {
+									id : '',
+									ingredient : '',
+									amount : ''
+								};
+
+								if (undefined != $scope.addInventoryForm) {
+									$scope.addInventoryForm.$setPristine(); //reset Form
+								}
+							}
+
+							$scope.reset();
+
+						});
+		/*]]>*/
+	</script>
+
+
+
+	<div class="generic-container ng-cloak" ng-app="myApp"
+		ng-controller="inventoryCtrl as ctrl">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<span class="lead">View Inventory</span>
+			</div>
+
+			<!-- Coffee: <span id="currentCoffee" ng-bind="inventoryOriginal.coffee"></span><br />
+			Milk: <span id="currentMilk" ng-bind="inventoryOriginal.milk"></span><br />
+			Sugar: <span id="currentSugar" ng-bind="inventoryOriginal.sugar"></span><br />
+			Chocolate: <span id="currentChocolate"
+				ng-bind="inventoryOriginal.chocolate"></span><br /> -->
+
+			<!-- <div ng-repeat="ing in inventoryOriginal.ingredients track by $index">
+						{{ing.ingredient}}: {{ing.amount}}<br />
+			</div> -->
+
+			<div ng-repeat="ing in inventoryOriginal.ingredients track by $index">
+				{{ing.ingredient}}: {{ing.amount}}<br />
+			</div>
+
+
+			<div class="panel-heading">
+				<span class="lead">Add Ingredient </span>
+			</div>
+			<div class="formcontainer">
+				<form ng-submit="submit()" name="addInventoryForm"
+					class="form-horizontal">
+					<div class="row">
+						<div class="form-group col-md-12">
+							<label class="col-md-2 control-lable" for="file">Name</label>
+							<div class="col-md-7">
+								<input type="text" ng-model="ingredient.ingredient" name="name"
+									class="coffee form-control input-sm"
+									placeholder="New Ingredient Name" required="0" />
+								<div class="has-error" ng-show="addInventoryForm.$dirty">
+									<span ng-show="addInventoryForm.name.$error.required">This
+										is a required field</span> <span
+										ng-show="addInventoryForm.name.$error.min">Minimum
+										amount is 0</span> <span ng-show="addInventoryForm.name.$invalid">This
+										field is invalid </span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="row">
+						<div class="form-group col-md-12">
+							<label class="col-md-2 control-lable" for="file">Amount</label>
+							<div class="col-md-7">
+								<input type="text" ng-model="ingredient.amount" name="amount"
+									class="milk form-control input-sm" placeholder="Amount"
+									required="0" />
+								<div class="has-error" ng-show="addInventoryForm.$dirty">
+									<span ng-show="addInventoryForm.amount.$error.required">This
+										is a required field</span> <span
+										ng-show="addInventoryForm.amount.$error.min">Minimum
+										amount is 0</span> <span ng-show="addInventoryForm.amount.$invalid">This
+										field is invalid </span>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="row">
+						<div class="form-actions floatRight">
+							<button type="button" ng-click="submit()"
+								class="btn btn-warning btn-sm"
+								ng-disabled="addInventoryForm.$pristine">Add Ingredient</button>
+							<!-- <input type="submit" value="Add Ingredient"
+								class="btn btn-primary btn-sm"
+								ng-disabled="addInventoryForm.$invalid" /> -->
+							<button type="button" ng-click="reset()"
+								class="btn btn-warning btn-sm"
+								ng-disabled="addInventoryForm.$pristine">Reset Form</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div ng-show="success">Inventory Successfully Updated</div>
+			<!--  <div ng-show="failure">Error while updating inventory.</div>-->
+			<div ng-show="notInteger">Ingredient amount must be a positive integer.</div>
+
+			<div ng-show="invalidAmt">Ingredient amount must be at least 0.</div>
+			<div ng-show="duplicate">Ingredient already in the inventory.</div>
+		</div>
+
+		<a href="/index">Home</a>
+	</div>
+
+
+
+</body>
+</html>
