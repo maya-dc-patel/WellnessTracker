@@ -21,9 +21,12 @@ public class CoffeeMakerApplication {
      */
     public static void main ( final String[] args ) {
         // CoffeeMakerApplication.createSomeIngredients();
+        System.out.println("This is my application.");
         SpringApplication.run( CoffeeMakerApplication.class, args );
 
     }
+
+
 
     // public static void createSomeIngredients() {
     // IngredientService ingredientService = new Ingredient
