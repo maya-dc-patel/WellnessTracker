@@ -1,0 +1,4 @@
+<div>Contents of inventory {{ inventory?.id }}:</div>
+<div *ngFor="let ing of inventory?.ingredients">
+  {{ ing?.ingredient }} - {{ ing?.amount }}
+</div>
