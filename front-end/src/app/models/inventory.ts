@@ -1,6 +1,5 @@
-import { Ingredient } from "./ingredient";
+import { Ingredient } from './ingredient';
 
-
-  export interface Inventory {
-    ingredients: Ingredient[]
-  }
+export interface Inventory {
+  ingredients: Ingredient[];
+}

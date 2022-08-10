@@ -4,15 +4,15 @@ import { Ingredient } from './models/ingredient';
 import { Journal } from './models/journal';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AppService {
   public httpOptions = {
     headers: new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
       Authorization: 'authkey',
-      userid: '1',
-    }),
+      userid: '1'
+    })
   };
   constructor(private http: HttpClient) {}
 
