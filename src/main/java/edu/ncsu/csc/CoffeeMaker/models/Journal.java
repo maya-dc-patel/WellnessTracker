@@ -25,25 +25,27 @@ public class Journal extends DomainObject {
     // TODO make a minimum value??
     private String                 owner;
 
+
+
     @OneToMany ( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
-    private final List<Ingredient> ingredients;
+    private final List<Entry> entries;
 
     public Journal ( final String name, final String owner ) {
 
         super();
         this.name = name;
         this.owner = owner;
-        this.ingredients = new ArrayList<Ingredient>();
+        this.entries = new ArrayList<>();
     }
 
     public Journal () {
         super();
-        this.ingredients = new ArrayList<Ingredient>();
+        this.entries = new ArrayList<>();
     }
 
     @Override
     public String toString () {
-        return "Ingredient [name=" + name + ", owner=" + owner + "ingredients=" + ingredients.toString() + "]";
+        return "Journal [name=" + name + ", owner=" + owner + "entries=" + entries.toString() + "]";
     }
 
     public String getName () {
@@ -62,8 +64,8 @@ public class Journal extends DomainObject {
         this.owner = owner;
     }
 
-    public List<Ingredient> getIngredients () {
-        return ingredients;
+    public List<Entry> getEntries () {
+        return entries;
     }
 
     @SuppressWarnings ( "unused" )

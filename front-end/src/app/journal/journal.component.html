@@ -1,12 +1,36 @@
-<div class="flex flex-col">
-  <div>
-    <label>Name of Journal</label>
-    <input [(ngModel)]="name" type="text" />
+<div class="max-w-fit">
+  <label for="price" class="block text-sm font-medium text-gray-700"
+    >Price</label
+  >
+  <div class="mt-1 relative rounded-md shadow-sm">
+    <input
+      type="text"
+      name="price"
+      id="price"
+      class="max-w-fit focus:ring-offset-indigo-100 focus:ring-offset-0 focus:border-indigo-500 block pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
+      placeholder="Journal Name"
+    />
   </div>
+</div>
+<div class="flex flex-col">
+  <div class="max-w-fit">
+    <label>Name of Journal</label>
+    <div class="mt-1 relative rounded-md shadow">
+      <input
+        [(ngModel)]="name"
+        type="text"
+        placeholder="Journal name"
+        class="max-w-fit focus:ring-indigo-500 focus:border-2 focus:border-indigo-500 block p-2 focus:ring-2 sm:text-sm border-gray-300 rounded-md"
+      />
+    </div>
+  </div>
+  <div class="border-indigo-500 border">Hi</div>
 
   <div>
     <label>Owner of Journal</label>
-    <input [(ngModel)]="owner" type="text" />
+    <input class="bg-gray-200 border border-black" type="text" />
+
+    <textarea [(ngModel)]="owner" class="bg-pink"></textarea>
   </div>
 </div>
 <button (click)="createJournal()">Create Journal</button>
@@ -22,3 +46,8 @@
     {{ journal.name }} - {{ journal.owner }}
   </button>
 </div>
+
+<div>Image</div>
+<input type="file" (change)="onFileSelected($event)" #fileUpload />
+
+<img  [src]="formatImageUrl()"/>

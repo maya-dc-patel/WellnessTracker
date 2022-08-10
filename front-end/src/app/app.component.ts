@@ -12,6 +12,7 @@ export class AppComponent {
   ngOnInit() {
     this.appService.getData().subscribe((data) => {
       console.log(data);
+      
     });
     this.appService.getJournals().subscribe((data) => {
       console.log('journals', data);

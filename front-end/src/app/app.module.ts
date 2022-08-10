@@ -13,6 +13,7 @@ import { JournalComponent } from './journal/journal.component';
 import { JournalService } from './journal/journal.service';
 import { HeaderComponent } from './header/header.component';
 import { JournalEntryComponent } from './journal/journal-entry/journal-entry.component';
+import { CreateJournalComponent } from './create-journal/create-journal.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { JournalEntryComponent } from './journal/journal-entry/journal-entry.com
     JournalComponent,
     HeaderComponent,
     JournalEntryComponent,
+    CreateJournalComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [AppService, IngredientService, InventoryService, JournalService],

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Journal } from '../models/journal';
 import { JournalService } from './journal.service';
@@ -11,8 +12,13 @@ import { JournalService } from './journal.service';
 export class JournalComponent implements OnInit {
   public name = '';
   public owner = '';
+  public image = '';
   journalList!: Journal[];
-  constructor(private journalService: JournalService, private router: Router) {}
+  constructor(
+    private _sanitizer: DomSanitizer,
+    private journalService: JournalService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.getJournals();
@@ -34,5 +40,21 @@ export class JournalComponent implements OnInit {
       console.log('journals', data);
       this.getJournals();
     });
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.uploadFile(reader.result as string);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  uploadFile(file: any) {
+    this.image = file;
+  }
+  formatImageUrl() {
+    return this._sanitizer.bypassSecurityTrustResourceUrl(this.image);
   }
 }
