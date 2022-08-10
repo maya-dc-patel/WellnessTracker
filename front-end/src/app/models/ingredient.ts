@@ -1,4 +1,4 @@
 export interface Ingredient {
-    ingredient: String,
-    amount: Number
+  ingredient: String;
+  amount: Number;
 }

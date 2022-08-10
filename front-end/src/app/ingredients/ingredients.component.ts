@@ -7,7 +7,7 @@ import { IngredientService } from './ingredient.service';
 @Component({
   selector: 'app-ingredients',
   templateUrl: './ingredients.component.html',
-  styleUrls: ['./ingredients.component.css'],
+  styleUrls: ['./ingredients.component.css']
 })
 export class IngredientsComponent implements OnInit {
   allIngredients: any;

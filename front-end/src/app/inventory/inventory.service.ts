@@ -3,15 +3,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Ingredient } from '../models/ingredient';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class InventoryService {
   public httpOptions = {
     headers: new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
       Authorization: 'authkey',
-      userid: '1',
-    }),
+      userid: '1'
+    })
   };
   constructor(private http: HttpClient) {}
 
