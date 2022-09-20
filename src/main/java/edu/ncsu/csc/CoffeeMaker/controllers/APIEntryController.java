@@ -1,14 +1,21 @@
 package edu.ncsu.csc.CoffeeMaker.controllers;
 
-import edu.ncsu.csc.CoffeeMaker.models.Entry;
-import edu.ncsu.csc.CoffeeMaker.models.Ingredient;
-import edu.ncsu.csc.CoffeeMaker.services.EntryService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import edu.ncsu.csc.CoffeeMaker.models.Entry;
+import edu.ncsu.csc.CoffeeMaker.services.EntryService;
 
 @RestController
 public class APIEntryController extends APIController {
@@ -138,10 +145,10 @@ public class APIEntryController extends APIController {
     @PutMapping ( BASE_PATH + "/entries/{name}" )
     public ResponseEntity updateEntry ( @RequestBody final Entry newEntry ) {
 
-        final Entry entry = service.findByDate( newEntry.getEntry() );
-entry.setDate(newEntry.getDate());
+        final Entry entry = service.findByDate( newEntry.getDate() );
+        entry.setDate( newEntry.getDate() );
 
-entry.setContent( newEntry.getContent() );
+        entry.setContent( newEntry.getContent() );
         entry.setDate( newEntry.getDate() );
 
         service.save( entry );

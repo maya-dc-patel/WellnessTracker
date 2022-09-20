@@ -47,6 +47,21 @@ public class MappingController {
 
     /**
      * On a GET request to /recipe, the RecipeController will return
+     * /src/main/resources/templates/recipe.html.
+     *
+     * @param model
+     *            underlying UI model
+     * @return contents of the page
+     */
+    @CrossOrigin ( origins = "http://localhost:4200" )
+
+    @GetMapping ( { "/entry", "/recipe.html" } )
+    public String addEntry ( final Model model ) {
+        return "entry";
+    }
+
+    /**
+     * On a GET request to /recipe, the RecipeController will return
      * /src/main/resources/templates/addRecipe.html.
      *
      * @param model

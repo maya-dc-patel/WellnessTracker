@@ -1,4 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  trigger,
+  state,
+  style,
+  transition,
+  animate
+} from '@angular/animations';
+import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Journal } from '../models/journal';
@@ -7,28 +14,40 @@ import { JournalService } from './journal.service';
 @Component({
   selector: 'app-journal',
   templateUrl: './journal.component.html',
-  styleUrls: ['./journal.component.css']
+  styleUrls: ['./journal.component.css'],
+  animations: [
+    trigger('openClose', [
+      // ...
+      state(
+        'open',
+        style({
+          opacity: 1,
+          transform: 'scale(1, 1)'
+        })
+      ),
+      state(
+        'closed',
+        style({
+          opacity: 0,
+          transform: 'scale(0.95, 0.95)'
+        })
+      ),
+      transition('open => closed', [animate('100ms ease-in')]),
+      transition('closed => open', [animate('200ms ease-out')])
+    ])
+  ]
 })
 export class JournalComponent implements OnInit {
-  public name = '';
-  public owner = '';
-  public image = '';
-  journalList!: Journal[];
+  @Input() name!: String;
+  @Input() owner!: String;
+
   constructor(
     private _sanitizer: DomSanitizer,
     private journalService: JournalService,
     private router: Router
   ) {}
 
-  ngOnInit(): void {
-    this.getJournals();
-  }
-  getJournals() {
-    this.journalService.getJournals().subscribe((data) => {
-      console.log('data', data);
-      this.journalList = data;
-    });
-  }
+  ngOnInit(): void {}
   viewJournalEntries(name: String) {
     this.router.navigate([`journal/${name}`]);
   }
@@ -38,23 +57,6 @@ export class JournalComponent implements OnInit {
 
     this.journalService.sendJournalData(journal).subscribe((data) => {
       console.log('journals', data);
-      this.getJournals();
     });
-  }
-
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.uploadFile(reader.result as string);
-    };
-    reader.readAsDataURL(file);
-  }
-
-  uploadFile(file: any) {
-    this.image = file;
-  }
-  formatImageUrl() {
-    return this._sanitizer.bypassSecurityTrustResourceUrl(this.image);
   }
 }

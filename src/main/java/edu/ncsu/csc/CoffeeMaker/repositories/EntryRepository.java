@@ -1,10 +1,12 @@
 package edu.ncsu.csc.CoffeeMaker.repositories;
 
-import edu.ncsu.csc.CoffeeMaker.models.Ingredient;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface EntryRepository extends JpaRepository<Ingredient, Long> {
+import edu.ncsu.csc.CoffeeMaker.models.Entry;
+import edu.ncsu.csc.CoffeeMaker.models.Ingredient;
 
-    Ingredient findByDate ( String date );
+public interface EntryRepository extends JpaRepository<Entry, Long> {
+
+    Entry findByDate ( String date );
 
 }
