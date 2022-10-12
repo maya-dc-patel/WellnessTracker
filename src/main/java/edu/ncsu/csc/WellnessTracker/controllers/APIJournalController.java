@@ -73,6 +73,10 @@ public class APIJournalController extends APIController {
 
     @PostMapping ( BASE_PATH + "/journals" )
     public ResponseEntity createIngredient ( @RequestBody final Journal journal ) {
+        System.out.println("Journal object: " + journal);
+        System.out.println("Journal object: " + journal);
+        System.out.println("Journal object: " + journal);
+        System.out.println("Journal object: " + journal);
 
         final Journal db = service.findByName( journal.getName() );
 
@@ -142,7 +146,6 @@ public class APIJournalController extends APIController {
      */
     @PutMapping ( BASE_PATH + "/journal/{name}" )
     public ResponseEntity updateIngredient ( @RequestBody final Journal newJournal ) {
-
         final Journal journal = service.findByName( newJournal.getName() );
 
         journal.setName( newJournal.getName() );
