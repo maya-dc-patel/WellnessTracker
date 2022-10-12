@@ -10,10 +10,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>edu.ncsu.csc</groupId>
-	<artifactId>CoffeeMaker</artifactId>
+	<artifactId>WellnessTracker</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>CoffeeMaker</name>
-	<description>CoffeeMaker with transaction support</description>
+	<name>WellnessTracker</name>
+	<description>Wellness Tracker with transaction support</description>
 
 
 	<properties>
