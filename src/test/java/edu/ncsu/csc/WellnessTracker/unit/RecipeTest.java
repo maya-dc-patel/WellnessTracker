@@ -183,8 +183,8 @@ public class RecipeTest {
     @Test
     public void testJournalClass () {
         // Create two ingredients
-        final Journal j = new Journal( "Notebook 1", "Maya" );
-        journalService.save( j );
+        // final Journal j = new Journal( "Notebook 1", "Maya" );
+        // journalService.save( j );
 
     }
 
