@@ -31,7 +31,7 @@ public class Journal extends DomainObject {
 
 
     @OneToMany ( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
-    private final List<Entry> entries;
+    private  List<Entry> entries;
 
     public Journal ( final String name, final String owner, final String imageUrl) {
 
@@ -79,6 +79,10 @@ public class Journal extends DomainObject {
     public List<Entry> getEntries () {
         return entries;
     }
+    public void setEntries (List<Entry> entries) {
+        this.entries = entries;
+    }
+
 
     @SuppressWarnings ( "unused" )
     private void setId ( final Long id ) {

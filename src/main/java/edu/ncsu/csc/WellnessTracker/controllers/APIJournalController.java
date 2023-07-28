@@ -2,6 +2,8 @@ package edu.ncsu.csc.WellnessTracker.controllers;
 
 import java.util.List;
 
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -74,7 +76,7 @@ public class APIJournalController extends APIController {
     @PostMapping ( BASE_PATH + "/journals" )
     public ResponseEntity createIngredient ( @RequestBody final Journal journal ) {
         
-
+System.out.println("POSTING JOURNAL");
         final Journal db = service.findByName( journal.getName() );
 
         if ( null != db ) {
@@ -139,15 +141,18 @@ public class APIJournalController extends APIController {
      *            amounts to add to inventory
      * @return response to the request
      */
+    @CrossOrigin ( origins = "http://localhost:4200" )
     @PutMapping ( BASE_PATH + "/journal/{name}" )
-    public ResponseEntity updateIngredient ( @RequestBody final Journal newJournal ) {
+    public ResponseEntity updateJournal ( @RequestBody final Journal newJournal , @PathParam ( "name" ) String name) {
+        System.out.println("UPDATE JOURNAL");
         final Journal journal = service.findByName( newJournal.getName() );
 
         journal.setName( newJournal.getName() );
         journal.setOwner( newJournal.getOwner() );
+        
 
-        service.save( journal );
-        return new ResponseEntity( journal, HttpStatus.OK );
+        service.save( newJournal );
+        return new ResponseEntity( newJournal, HttpStatus.OK );
 
     }
 }
