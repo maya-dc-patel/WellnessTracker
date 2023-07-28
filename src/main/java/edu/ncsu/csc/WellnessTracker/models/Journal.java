@@ -1,6 +1,7 @@
 package edu.ncsu.csc.WellnessTracker.models;
 
 import java.io.Serializable;
+import java.sql.Clob;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -25,17 +26,28 @@ public class Journal extends DomainObject {
     // TODO make a minimum value??
     private String                 owner;
 
+    private String imageUrl;
+
 
 
     @OneToMany ( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
     private final List<Entry> entries;
 
-    public Journal ( final String name, final String owner ) {
+    public Journal ( final String name, final String owner, final String imageUrl) {
 
         super();
         this.name = name;
         this.owner = owner;
+        this.imageUrl = imageUrl;
         this.entries = new ArrayList<>();
+    }
+
+    public String getImageUrl () {
+        return imageUrl;
+    }
+
+    public void setImageUrl ( final String imageUrl ) {
+        this.imageUrl = imageUrl;
     }
 
     public Journal () {
@@ -45,7 +57,7 @@ public class Journal extends DomainObject {
 
     @Override
     public String toString () {
-        return "Journal [name=" + name + ", owner=" + owner + "entries=" + entries.toString() + "]";
+        return "Journal [name=" + name + ", owner=" + owner + "entries=" + entries.toString() + "imageURL: " + imageUrl + "]";
     }
 
     public String getName () {

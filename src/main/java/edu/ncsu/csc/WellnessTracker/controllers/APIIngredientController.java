@@ -49,10 +49,7 @@ public class APIIngredientController extends APIController {
 
     @GetMapping ( BASE_PATH + "/ingredients/{name}" )
     public ResponseEntity getIngredient ( @PathVariable final String name ) {
-        System.out.println( "line 38" + name );
-        System.out.println( service.findAll() );
         final Ingredient ingr = service.findByName( name );
-        System.out.println( "line 40" + ingr );
 
         if ( null == ingr ) {
             return new ResponseEntity( HttpStatus.NOT_FOUND );
@@ -75,9 +72,7 @@ public class APIIngredientController extends APIController {
 
     @PostMapping ( BASE_PATH + "/ingredients" )
     public ResponseEntity createIngredient ( @RequestBody final Ingredient ingredient ) {
-        System.out.println( ingredient );
         final Ingredient db = service.findByName( ingredient.getIngredient() );
-        System.out.println( db );
 
         if ( null != db ) {
             return new ResponseEntity( HttpStatus.CONFLICT );
@@ -109,7 +104,6 @@ public class APIIngredientController extends APIController {
     public ResponseEntity deleteIngredient ( @PathVariable final String name ) {
         // System.out.println( "1 - " + ingredient.toString() );
         final Ingredient ingredient = service.findByName( name );
-        System.out.println( "2 - " + ingredient.toString() );
         if ( null == ingredient ) {
             return new ResponseEntity( errorResponse( "No ingredient found for name " + name ), HttpStatus.NOT_FOUND );
         }

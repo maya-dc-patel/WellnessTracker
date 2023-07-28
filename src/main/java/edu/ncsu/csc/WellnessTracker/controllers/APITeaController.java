@@ -14,28 +14,30 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.ncsu.csc.WellnessTracker.models.Entry;
-import edu.ncsu.csc.WellnessTracker.services.EntryService;
+import edu.ncsu.csc.WellnessTracker.models.Journal;
+import edu.ncsu.csc.WellnessTracker.models.Tea;
+import edu.ncsu.csc.WellnessTracker.services.JournalService;
+import edu.ncsu.csc.WellnessTracker.services.TeaService;
 
 @RestController
-public class APIEntryController extends APIController {
+public class APITeaController extends APIController {
 
     /**
      * IngredientService object, to be autowired in by Spring to allow for
      * manipulating the Ingredient model
      */
     @Autowired
-    private EntryService service;
+    private TeaService service;
 
     /**
-     * REST API method to provide GET access to all recipes in the system
+     * REST API method to provide GET access to all journals in the system
      *
-     * @return JSON representation of all recipies
+     * @return JSON representation of all journals
      */
     @CrossOrigin ( origins = "http://localhost:4200" )
 
-    @GetMapping ( BASE_PATH + "/entries" )
-    public List<Entry> getAllEntries () {
+    @GetMapping ( BASE_PATH + "/teas" )
+    public List<Tea> getAllTeas () {
         return service.findAll();
     }
 
@@ -47,17 +49,16 @@ public class APIEntryController extends APIController {
      */
     @CrossOrigin ( origins = "http://localhost:4200" )
 
-    @GetMapping ( BASE_PATH + "/entries/{name}" )
-    public ResponseEntity getEntry ( @PathVariable final String date ) {
-      
-        final Entry entr = service.findByDate( date );
-   
+    @GetMapping ( BASE_PATH + "/tea/{name}" )
+    public ResponseEntity getTea ( @PathVariable final String name ) {
 
-        if ( null == entr ) {
+        final Tea tea = service.findByName( name );
+
+        if ( null == tea ) {
             return new ResponseEntity( HttpStatus.NOT_FOUND );
         }
 
-        return new ResponseEntity( entr, HttpStatus.OK );
+        return new ResponseEntity( tea, HttpStatus.OK );
     }
 
     /**
@@ -65,30 +66,36 @@ public class APIEntryController extends APIController {
      * used to create a new Ingredient by automatically converting the JSON
      * RequestBody provided to a Ingredient object. Invalid JSON will fail.
      *
-     * @param entry
+     * @param ingredient
      *            The valid Ingredient to be saved.
      * @return ResponseEntity indicating success if the Ingredient could be
      *         saved, or an error if it could not be
      */
     @CrossOrigin ( origins = "http://localhost:4200" )
 
-    @PostMapping ( BASE_PATH + "/entries" )
-    public ResponseEntity createEntry ( @RequestBody final Entry entry ) {
-        final Entry db = service.findByDate( entry.getDate() );
-   
+    @PostMapping ( BASE_PATH + "/teas" )
+    public ResponseEntity saveTea ( @RequestBody final Tea tea ) {
+        System.out.println("IN SAVE TEA METHOD");
+     
 
-        if ( null != db ) {
+        final Tea db = service.findByName( tea.getName() );
+        System.out.println("FIND FROM DB: " + db);
+
+        if ( db != null ) {
             return new ResponseEntity( HttpStatus.CONFLICT );
         }
 
         try {
-            service.save( entry );
+            System.out.println("line 89");
+            service.save( tea );
+            System.out.println("REACHED");
             return new ResponseEntity( HttpStatus.CREATED );
         }
         catch ( final Exception e ) {
+            System.out.println(e.getMessage() + " " + e.getCause());
             return new ResponseEntity( HttpStatus.BAD_REQUEST ); // HttpStatus.FORBIDDEN
-            // would be OK
-            // too.
+                                                                 // would be OK
+                                                                 // too.
         }
 
     }
@@ -103,15 +110,17 @@ public class APIEntryController extends APIController {
      * @return Success if the ingredient could be deleted; an error if the
      *         ingredient does not exist
      */
-    @DeleteMapping ( BASE_PATH + "/entries/{name}" )
-    public ResponseEntity deleteIngredient ( @PathVariable final String date ) {
-        final Entry entry = service.findByDate( date );
-        if ( null == entry ) {
-            return new ResponseEntity( errorResponse( "No entry found for name " + date ), HttpStatus.NOT_FOUND );
+    @DeleteMapping ( BASE_PATH + "/teas/{name}" )
+    public ResponseEntity deleteIngredient ( @PathVariable final String name ) {
+        // System.out.println( "1 - " + ingredient.toString() );
+        final Tea journal = service.findByName( name );
+        System.out.println( "2 - " + journal.toString() );
+        if ( null == journal ) {
+            return new ResponseEntity( errorResponse( "No journal found for name " + name ), HttpStatus.NOT_FOUND );
         }
-        service.delete( entry );
+        service.delete( journal );
 
-        return new ResponseEntity( successResponse( date + " was deleted successfully" ), HttpStatus.OK );
+        return new ResponseEntity( successResponse( name + " was deleted successfully" ), HttpStatus.OK );
 
     }
 
@@ -135,21 +144,19 @@ public class APIEntryController extends APIController {
      * REST API endpoint to provide update access to CoffeeMaker's singleton
      * ingredients. This will update the Ingredient of the CoffeeMaker.
      *
-     * @param newIngredient
+     * @param newJournal
      *            amounts to add to inventory
      * @return response to the request
      */
-    @PutMapping ( BASE_PATH + "/entries/{name}" )
-    public ResponseEntity updateEntry ( @RequestBody final Entry newEntry ) {
+    @PutMapping ( BASE_PATH + "/tea/{name}" )
+    public ResponseEntity updateIngredient ( @RequestBody final Tea newJournal ) {
+        final Tea journal = service.findByName( newJournal.getName() );
 
-        final Entry entry = service.findByDate( newEntry.getDate() );
-        entry.setDate( newEntry.getDate() );
+        journal.setName( newJournal.getName() );
+        // journal.setOwner( newJournal.getOwner() );
 
-        entry.setContent( newEntry.getContent() );
-        entry.setDate( newEntry.getDate() );
-
-        service.save( entry );
-        return new ResponseEntity( entry, HttpStatus.OK );
+        service.save( journal );
+        return new ResponseEntity( journal, HttpStatus.OK );
 
     }
 }
