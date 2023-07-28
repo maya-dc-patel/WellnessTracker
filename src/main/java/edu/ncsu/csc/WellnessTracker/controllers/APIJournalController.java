@@ -73,10 +73,7 @@ public class APIJournalController extends APIController {
 
     @PostMapping ( BASE_PATH + "/journals" )
     public ResponseEntity createIngredient ( @RequestBody final Journal journal ) {
-        System.out.println("Journal object: " + journal);
-        System.out.println("Journal object: " + journal);
-        System.out.println("Journal object: " + journal);
-        System.out.println("Journal object: " + journal);
+        
 
         final Journal db = service.findByName( journal.getName() );
 
@@ -108,9 +105,7 @@ public class APIJournalController extends APIController {
      */
     @DeleteMapping ( BASE_PATH + "/journals/{name}" )
     public ResponseEntity deleteIngredient ( @PathVariable final String name ) {
-        // System.out.println( "1 - " + ingredient.toString() );
         final Journal journal = service.findByName( name );
-        System.out.println( "2 - " + journal.toString() );
         if ( null == journal ) {
             return new ResponseEntity( errorResponse( "No journal found for name " + name ), HttpStatus.NOT_FOUND );
         }

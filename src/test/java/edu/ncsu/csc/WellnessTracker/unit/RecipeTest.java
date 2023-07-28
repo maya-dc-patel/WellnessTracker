@@ -4,6 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.ConstraintViolationException;
@@ -22,8 +23,10 @@ import edu.ncsu.csc.WellnessTracker.TestConfig;
 import edu.ncsu.csc.WellnessTracker.models.Ingredient;
 import edu.ncsu.csc.WellnessTracker.models.Journal;
 import edu.ncsu.csc.WellnessTracker.models.Recipe;
+import edu.ncsu.csc.WellnessTracker.models.Tea;
 import edu.ncsu.csc.WellnessTracker.services.JournalService;
 import edu.ncsu.csc.WellnessTracker.services.RecipeService;
+import edu.ncsu.csc.WellnessTracker.services.TeaService;
 
 @RunWith ( SpringRunner.class )
 @EnableAutoConfiguration
@@ -34,7 +37,8 @@ public class RecipeTest {
     private RecipeService  service;
     @Autowired
     private JournalService journalService;
-
+    @Autowired
+    private TeaService teaService;
     @Before
     public void setup () {
         service.deleteAll();
@@ -62,6 +66,16 @@ public class RecipeTest {
         // r2.setSugar( 1 );
         // r2.setChocolate( 1 );
         service.save( r2 );
+
+        teaService.deleteAll();
+        List<String> ings = new ArrayList<>();
+        ings.add("ginger");
+        ings.add("aloe");
+         Tea t = new Tea();
+         t.setName("chamomile");
+         final Ingredient i = new Ingredient("ginger", -1);
+        //  t.addIngredient(i); 
+         teaService.save(t);
 
         final List<Recipe> recipes = service.findAll();
         Assert.assertEquals( "Creating two recipes should result in two recipes in the database", 2, recipes.size() );
