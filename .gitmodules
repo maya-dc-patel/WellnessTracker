@@ -1,3 +1,3 @@
 [submodule "front-end"]
     path = front-end
-    url = https://github.com/maya-dc-patel/front-end.git
+    url = https://github.com/maya-dc-patel/WellnessTracker/front-end.git
